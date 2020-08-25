@@ -1,0 +1,41 @@
+/* mbed Microcontroller Library
+ * Copyright (c) 2019 ARM Limited
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+#include "mbed.h"
+
+I2CSlave slave(PB_7, PB_6);
+
+int main()
+{
+    // Initialise the digital pin LED1 as an output
+    DigitalOut led(LED1);
+    DigitalOut led2(PA_5);
+    int size = 1;
+    int input;
+    //char compare;
+    slave.address(0x06);
+    slave.frequency(100000);
+    while (1) {
+        int i = slave.receive();
+          switch (i) {
+            case I2CSlave::ReadAddressed:
+                led2 = 1;
+                break;
+            case I2CSlave::WriteGeneral:
+                input = slave.read();
+                break;
+            case I2CSlave::WriteAddressed:
+                input = slave.read();
+                break;
+        //compare = input;
+        if (input == 2) {
+            led = 1;
+            }
+        else {
+            led = 0;
+            }
+        }
+    }
+}
